@@ -38,7 +38,17 @@ def read_file(file):
 
 
 def count_md_files(directory):
-    pass
+    if path_exists(directory):
+        files = os.listdir(directory)
+        count = sum(1 for file in files if is_md_file(file))
+        if count <= 0:
+            print(f"No available Markdown file in {directory} directory.")
+        elif count == 1:
+            print(f"There's 1 Markdown file in {directory} directory.")
+        else:
+            print(f"There're {count} Markdown files in {directory} directory.")
+    else:
+        print(f"{directory} path does not exist.")
 
 
 def read_all_md_file(directory):
@@ -46,4 +56,13 @@ def read_all_md_file(directory):
 
 
 def md_file_generate(directory):
-    pass
+    if path_exists(directory):
+        today = datetime.date.today()
+        for i in range(1, 8):
+            file_date = today + datetime.timedelta(days=i)
+            file_name = f"{file_date.strftime('%Y%m%d')}.md"
+            file_path = os.path.join(directory, file_name)
+            with open(file_path, "w") as f:
+                f.write(f"{file_date} Markdonw file is created in {directory}.")
+    else:
+        print(f"{directory} path does not exist.")
