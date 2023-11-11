@@ -66,3 +66,45 @@ def test_generate_single_md_file_2(mock_open, mock_exists):
 
     # Check if it was called correctly
     mock_open.assert_called_once_with(expected_file_path, "w")
+
+
+# Test for read_file function
+def test_read_file_1():
+    expected_output = ["this is a draft file to test\n", "can you see this line? \n"]
+    assert read_file("/Users/quinnle/PycharmProjects/md-file-manager/draft.md") == expected_output
+
+
+def test_read_file_2():
+    assert read_file("/Users/quinnle/PycharmProjects/md-file-manager/draft2.md") == ["test"]
+
+
+def test_read_file_3():
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as tmpfile:
+        content = "Line 1\nLine 2\nLine 3"
+        tmpfile.write(content)
+        tmpfile_name = tmpfile.name
+
+    lines = read_file(tmpfile_name)
+    assert lines == ["Line 1\n", "Line 2\n", "Line 3"]
+
+    os.remove(tmpfile_name)
+
+
+@mock.patch("md_file_manager.is_md_file", return_value=False)
+def test_read_file_4(mock_is_md_file):
+    assert read_file("/path/to/non-md-file.txt") is None
+
+
+def test_md_file_generate_existing_directory():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        md_file_generate(tmp_dir)
+
+        # Check for each of the next 7 days if a file has been created
+        today = datetime.date.today()
+        for i in range(1, 8):
+            file_date = today + datetime.timedelta(days=i)
+            file_name = f"{file_date.strftime('%Y%m%d')}.md"
+            file_path = os.path.join(tmp_dir, file_name)
+
+            assert os.path.exists(file_path), f"File {file_name} was not created."
+

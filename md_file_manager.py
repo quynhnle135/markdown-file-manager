@@ -33,8 +33,10 @@ def read_file(file):
             lines = f.readlines()
             for l in lines:
                 print(l)
+            return lines
     else:
         print("File's format is not correct or file doesn't exist.")
+        return None
 
 
 def count_md_files(directory):
