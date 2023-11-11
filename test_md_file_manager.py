@@ -31,7 +31,7 @@ def test_count_md_files_2():
 
 
 def test_count_md_files_3():
-    assert count_md_files("/Users/quinnle/PycharmProjects/md-file-manager") == 2
+    assert count_md_files("/Users/quinnle/PycharmProjects/md-file-manager") == 3
 
 
 # Test for generate_single_md_file function

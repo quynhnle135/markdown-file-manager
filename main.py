@@ -10,7 +10,7 @@ def main():
     parser.add_argument("-rd", "--readmd", type=str, help="Read and display the contents of a specified file.")
     parser.add_argument("-co", "--count", type=str, help="Count the number of Markdown (.md) files in the specified directory. Use '.' to count files in the current directory.")
     parser.add_argument("-g", "--generate", type=str, help="Generate 7 Markdown (.md) files for the next 7 days, starting from tomorrow.")
-    parser.add_argument("-gc", "---generatecustomize", type=str, help="Directory to generate Markdown files.")
+    parser.add_argument("-gc", "--generatecustomize", type=str, help="Directory to generate Markdown files.")
     parser.add_argument("-d", "--days", type=int, default=7, help="Number of days to generate files for (default: 7).")
     args = parser.parse_args()
 
