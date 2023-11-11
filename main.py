@@ -1,28 +1,31 @@
-from md_file_manager import validate_file, validate_path, create_file, read_file, md_file_generate, count_md_files
+from md_file_manager import path_exists, is_md_file, read_file, generate_single_md_file
 import argparse
 
 
 def main():
     parser = argparse.ArgumentParser(description="Welcome to MD File Manager program.")
-    parser.add_argument("-vp", "--validatepath", type=str, help="Validate path")
-    parser.add_argument("-vf", "--validatefile", type=str, help="Validate .md file")
-    parser.add_argument("-c", "--create", type=str, help="Create simple MD file in the given directory. Enter . to create file in the current directory")
-    parser.add_argument("-r", "--read", type=str, help="Read file.")
-    parser.add_argument("-g", "--generate", type=str, help="Generate 7 .md files.")
-    parser.add_argument("-cf", "--count", type=str, help="Count available .md files in given directory.")
+    parser.add_argument("-p", "--path", type=str, help="Check if the specified path exists in the system")
+    parser.add_argument("-m", "--validatemd", type=str, help="Verify the specified file is a Markdown (.md) file")
+    parser.add_argument("-cr", "--createmd", type=str, help="Create a new Markdown (.md) file in the specified directory. Use '.' to indicate the current directory.")
+    parser.add_argument('-rd', "--readmd", type=str, help="Read and display the contents of a specified file.")
+
     args = parser.parse_args()
-    if args.create:
-        create_file(args.create)
-    elif args.read:
-        read_file(args.read)
-    elif args.generate:
-        md_file_generate(args.generate)
-    elif args.count:
-        count_md_files(args.count)
-    elif args.validatepath:
-        validate_path(args.validatepath)
-    elif args.validatefile:
-        validate_file(args.validatefile)
+
+    if args.path:
+        if path_exists(args.path):
+            print(f"The path {args.path} exists.")
+        else:
+            print(f"The path {args.path} does not exist.")
+    elif args.validatemd:
+        if is_md_file(args.validatemd):
+            print(f"{args.validatemd} is a valid Markdonw file")
+        else:
+            print(f"{args.validatemd} is not a valid Markdown file.")
+    elif args.createmd:
+        generate_single_md_file(args.createmd)
+        print(f"Markdown is created in {args.createmd} directory.")
+    elif args.readf:
+        read_file(args.readf)
 
 
 if __name__ == "__main__":

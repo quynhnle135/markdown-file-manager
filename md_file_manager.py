@@ -16,12 +16,25 @@ def is_md_file(file_path):
     return file_path.endswith(".md")
 
 
-def create_file(directory):
-    pass
+def generate_single_md_file(path):
+    if path_exists(path):
+        file_date = datetime.datetime.now()
+        file_name = f"{file_date.strftime('%y%m%d')}.md"
+        file_path = os.path.join(path, file_name)
+        with open(file_path, "w") as f:
+            f.write(f"This file is created at {file_date} in {file_path} directory.")
+    else:
+        print("The given path does not exist.")
 
 
 def read_file(file):
-    pass
+    if is_md_file(file):
+        with open(file, "r") as f:
+            lines = f.readlines()
+            for l in lines:
+                print(l)
+    else:
+        print("File's format is not correct or file doesn't exist.")
 
 
 def count_md_files(directory):
