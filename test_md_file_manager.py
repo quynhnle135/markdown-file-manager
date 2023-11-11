@@ -1,8 +1,6 @@
 import tempfile
 import unittest.mock as mock
 from md_file_manager import *
-import os
-import datetime
 
 
 # Test for path_exists function
@@ -33,7 +31,7 @@ def test_count_md_files_2():
 
 
 def test_count_md_files_3():
-    assert count_md_files("/Users/quinnle/PycharmProjects/md-file-manager") == 1
+    assert count_md_files("/Users/quinnle/PycharmProjects/md-file-manager") == 2
 
 
 # Test for generate_single_md_file function
@@ -70,7 +68,7 @@ def test_generate_single_md_file_2(mock_open, mock_exists):
 
 # Test for read_file function
 def test_read_file_1():
-    expected_output = ["this is a draft file to test\n", "can you see this line? \n"]
+    expected_output = ["line1\n", "line2\n", "line3"]
     assert read_file("/Users/quinnle/PycharmProjects/md-file-manager/draft.md") == expected_output
 
 
@@ -107,4 +105,21 @@ def test_md_file_generate_existing_directory():
             file_path = os.path.join(tmp_dir, file_name)
 
             assert os.path.exists(file_path), f"File {file_name} was not created."
+
+
+def test_customized_md_file_generate():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        customized_md_file_generate(tmp_dir, 10)
+
+        today = datetime.date.today()
+        count = 0
+        for i in range(1, 11):
+            file_date = today + datetime.timedelta(days=i)
+            file_name = f"{file_date.strftime('%Y%m%d')}.md"
+            file_path = os.path.join(tmp_dir, file_name)
+            count += 1
+            assert os.path.exists(file_path), f"File {file_name} was not created."
+
+        assert count == count_md_files(tmp_dir)
+
 

@@ -1,5 +1,5 @@
-import os
 import datetime
+import os
 
 
 def path_exists(path):
@@ -68,3 +68,20 @@ def md_file_generate(directory):
                 f.write(f"{file_date} Markdonw file is created in {directory}.")
     else:
         print(f"{directory} path does not exist.")
+
+
+def customized_md_file_generate(directory, days=7):
+    if days == 7:
+        md_file_generate(directory)
+    else:
+        if path_exists(directory):
+            today = datetime.date.today()
+            for i in range(1, days + 1):
+                file_date = today + datetime.timedelta(days=i)
+                file_name = f"{file_date.strftime('%Y%m%d')}.md"
+                file_path = os.path.join(directory, file_name)
+                with open(file_path, "w") as f:
+                    f.write(f"{file_date} Markdown file is created in {directory}")
+        else:
+            print(f"{directory} path does not exist.")
+            return None
