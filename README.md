@@ -56,7 +56,12 @@ optional arguments:
   -gc GENERATECUSTOMIZE, --generatecustomize GENERATECUSTOMIZE
                         Directory to generate Markdown files.
   -d DAYS, --days DAYS  Number of days to generate files for (default: 7).
-
+  -uf UPDATEMD, --updatemd UPDATEMD
+                        Updated content of the specified Markdown file.
+  -nc NEWCONTENT, --newcontent NEWCONTENT
+                        New content for updating.
+  -u UPDATE, --update UPDATE
+                        Updated contents of Markdown files in the specified directory.
 ```
 
 ## Examples:
