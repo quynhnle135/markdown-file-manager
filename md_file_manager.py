@@ -3,7 +3,6 @@ import os
 
 
 def path_exists(path):
-    """Check if given path exists."""
     try:
         return os.path.exists(path)
     except OSError as e:
@@ -12,7 +11,6 @@ def path_exists(path):
 
 
 def is_md_file(file_path):
-    """Check if a given file path is for a Markdown file."""
     return file_path.endswith(".md")
 
 
@@ -64,8 +62,11 @@ def md_file_generate(directory):
             file_date = today + datetime.timedelta(days=i)
             file_name = f"{file_date.strftime('%Y%m%d')}.md"
             file_path = os.path.join(directory, file_name)
-            with open(file_path, "w") as f:
-                f.write(f"{file_date} Markdonw file is created in {directory}.")
+            with open(file_path, "w") as file:
+                file.write("# 1. What I Learned Today\n\n\n")
+                file.write("# 2. Questions I Have\n\n\n")
+                file.write("# 3. What I Found Challenging\n\n\n")
+                file.write("# 4. Code I Wrote Today\n\n\n")
     else:
         print(f"{directory} path does not exist.")
 
@@ -80,8 +81,34 @@ def customized_md_file_generate(directory, days=7):
                 file_date = today + datetime.timedelta(days=i)
                 file_name = f"{file_date.strftime('%Y%m%d')}.md"
                 file_path = os.path.join(directory, file_name)
-                with open(file_path, "w") as f:
-                    f.write(f"{file_date} Markdown file is created in {directory}")
+                with open(file_path, "w") as file:
+                    file.write("# 1. What I Learned Today\n\n\n")
+                    file.write("# 2. Questions I Have\n\n\n")
+                    file.write("# 3. What I Found Challenging\n\n\n")
+                    file.write("# 4. Code I Wrote Today\n\n\n")
         else:
             print(f"{directory} path does not exist.")
             return None
+
+
+def update_md_file_content(file, new_content):
+    if is_md_file(file):
+        with open(file, "w") as f:
+            f.write(new_content)
+        print(f"New content has been updated in {file}")
+    else:
+        print(f"{file} file does not exist.")
+
+
+def update_all_md_files_content_in_dir(directory, new_content):
+    if path_exists(directory):
+        files = os.listdir(directory)
+        for f in files:
+            if is_md_file(f):
+                file_path = os.path.join(directory, f)
+                with open(file_path, "w") as file:
+                    file.write(new_content)
+                print(f"New content has been updated in {file_path}")
+        print("Finish updating content")
+    else:
+        print("Invalid path.")

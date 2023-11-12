@@ -1,3 +1,2 @@
-line1
-line2
-line3
+# Heading 1
+## Heading 2

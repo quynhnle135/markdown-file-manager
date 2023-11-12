@@ -1,4 +1,4 @@
-from md_file_manager import path_exists, is_md_file, read_file, generate_single_md_file, count_md_files, md_file_generate, customized_md_file_generate
+from md_file_manager import *
 import argparse
 
 
@@ -12,6 +12,10 @@ def main():
     parser.add_argument("-g", "--generate", type=str, help="Generate 7 Markdown (.md) files for the next 7 days, starting from tomorrow.")
     parser.add_argument("-gc", "--generatecustomize", type=str, help="Directory to generate Markdown files.")
     parser.add_argument("-d", "--days", type=int, default=7, help="Number of days to generate files for (default: 7).")
+    parser.add_argument("-uf", "--updatemd", type=str, help="Updated content of the specified Markdown file.")
+    parser.add_argument("-nc", "--newcontent", type=str, help="New content for updating.")
+    parser.add_argument("-u", "--update", type=str, help="Updated contents of Markdown files in the specified directory.")
+
     args = parser.parse_args()
 
     if args.path:
@@ -37,6 +41,10 @@ def main():
     elif args.generatecustomize:
         customized_md_file_generate(args.generatecustomize, args.days)
         print(f"Markdown files are created.")
+    elif args.updatemd:
+        update_md_file_content(args.updatemd, args.newcontent)
+    elif args.update:
+        update_all_md_files_content_in_dir(args.update, args.newcontent)
 
 
 if __name__ == "__main__":
