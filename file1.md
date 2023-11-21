@@ -1,1 +1,1 @@
-This is the new content written from Terminal
+This is the new content written from TerminalThis is new content\nThis is new content

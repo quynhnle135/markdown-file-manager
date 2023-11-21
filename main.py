@@ -3,18 +3,20 @@ import argparse
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Welcome to MD File Manager program.")
-    parser.add_argument("-p", "--path", type=str, help="Check if the specified path exists in the system")
-    parser.add_argument("-m", "--validatemd", type=str, help="Verify the specified file is a Markdown (.md) file")
-    parser.add_argument("-cr", "--createmd", type=str, help="Create a new Markdown (.md) file in the specified directory. Use '.' to indicate the current directory.")
-    parser.add_argument("-rd", "--readmd", type=str, help="Read and display the contents of a specified file.")
-    parser.add_argument("-co", "--count", type=str, help="Count the number of Markdown (.md) files in the specified directory. Use '.' to count files in the current directory.")
-    parser.add_argument("-g", "--generate", type=str, help="Generate 7 Markdown (.md) files for the next 7 days, starting from tomorrow.")
-    parser.add_argument("-gc", "--generatecustomize", type=str, help="Directory to generate Markdown files.")
-    parser.add_argument("-d", "--days", type=int, default=7, help="Number of days to generate files for (default: 7).")
-    parser.add_argument("-uf", "--updatemd", type=str, help="Updated content of the specified Markdown file.")
-    parser.add_argument("-nc", "--newcontent", type=str, help="New content for updating.")
-    parser.add_argument("-u", "--update", type=str, help="Updated contents of Markdown files in the specified directory.")
+    parser = argparse.ArgumentParser(description="MD File Manager")
+    parser.add_argument("-p", "--path", help="Check if the specified path exists in the system")
+    parser.add_argument("-f", "--file", help="Verify the specified file is a Markdown (.md) file")
+    parser.add_argument("-r", "--read", help="Read and display the contents of a specified file.")
+    parser.add_argument("-co", "--count", help="Count the number of Markdown (.md) files in the specified "
+                        "directory. Use '.' to count files in the current directory.")
+    parser.add_argument("-g", "--generate", help="Generate multiple Markdown files. "
+                        "If specified is not entered, default amount of files will be created is 7.")
+    parser.add_argument("-a", "--add", help="Add new content to existing files.")
+    parser.add_argument("-u", "--update", help="Updated contents of Markdown files in the specified directory.")
+    parser.add_argument("-d", "--days", type=int, help="Number of days to generate files for (default: 7).")
+    parser.add_argument("-ct", "--content", type=str, help="New content for updating.")
+    parser.add_argument("-cj", "--coding", action="store_true", help="Generate file with Coding Journal template")
+    parser.add_argument("-dp", "--practice", action="store_true", help="Generate file with Daily Practice template")
 
     args = parser.parse_args()
 
@@ -23,28 +25,31 @@ def main():
             print(f"The path {args.path} exists.")
         else:
             print(f"The path {args.path} does not exist.")
-    elif args.validatemd:
+
+    if args.file:
         if is_md_file(args.validatemd):
-            print(f"{args.validatemd} is a valid Markdonw file")
+            print(f"{args.validatemd} is a valid Markdown file.")
         else:
             print(f"{args.validatemd} is not a valid Markdown file.")
-    elif args.createmd:
-        generate_single_md_file(args.createmd)
-        print(f"Markdown is created in {args.createmd} directory.")
-    elif args.readmd:
-        read_file(args.readmd)
-    elif args.count:
+
+    if args.read:
+        print("Start reading file...")
+        read_file(args.read)
+        print("-Finish reading file-")
+
+    if args.count:
         count_md_files(args.count)
-    elif args.generate:
-        md_file_generate(args.generate)
-        print(f"7 Markdown files are created in {args.generate} directory.")
-    elif args.generatecustomize:
-        customized_md_file_generate(args.generatecustomize, args.days)
-        print(f"Markdown files are created.")
-    elif args.updatemd:
-        update_md_file_content(args.updatemd, args.newcontent)
-    elif args.update:
-        update_all_md_files_content_in_dir(args.update, args.newcontent)
+
+    if args.generate:
+        generate_md_file(args.generate, args)
+        print("Multiple Markdown files are created.")
+
+    if args.add:
+        add_new_content(args.add, args.content)
+
+    if args.update:
+        update_content(args.update, args.content)
+        print("New content is updated.")
 
 
 if __name__ == "__main__":

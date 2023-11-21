@@ -2,6 +2,7 @@ import datetime
 import os
 
 
+# Validate entered path/directory
 def path_exists(path):
     try:
         return os.path.exists(path)
@@ -10,19 +11,9 @@ def path_exists(path):
         return False
 
 
+# Validate if enter path/file is a valid Markdown
 def is_md_file(file_path):
     return file_path.endswith(".md")
-
-
-def generate_single_md_file(path):
-    if path_exists(path):
-        file_date = datetime.date.today()
-        file_name = f"{file_date.strftime('%y%m%d')}.md"
-        file_path = os.path.join(path, file_name)
-        with open(file_path, "w") as f:
-            f.write(f"This file is created at {file_date} in {file_path} directory.")
-    else:
-        print("The given path does not exist.")
 
 
 def read_file(file):
@@ -48,50 +39,50 @@ def count_md_files(directory):
             print(f"There's 1 Markdown file in {directory} directory.")
             return count
         else:
-            print(f"There're {count} Markdown files in {directory} directory.")
+            print(f"There are {count} Markdown files in {directory} directory.")
             return count
     else:
         print(f"{directory} path does not exist.")
         return None
 
 
-def md_file_generate(directory):
+def generate_md_file(directory, args):
+    if args.days:
+        amount = args.days
+    else:
+        amount = 7
+    if args.coding:
+        template = "/Users/quinnle/PycharmProjects/md-file-manager/templates/coding_journal_template.md"
+    elif args.practice:
+        template = "/Users/quinnle/PycharmProjects/md-file-manager/templates/daily_practice_template.md"
+    else:
+        template = ""
     if path_exists(directory):
         today = datetime.date.today()
-        for i in range(1, 8):
+        for i in range(1, amount + 1):
             file_date = today + datetime.timedelta(days=i)
             file_name = f"{file_date.strftime('%Y%m%d')}.md"
-            file_path = os.path.join(directory, file_name)
-            with open(file_path, "w") as file:
-                file.write("# 1. What I Learned Today\n\n\n")
-                file.write("# 2. Questions I Have\n\n\n")
-                file.write("# 3. What I Found Challenging\n\n\n")
-                file.write("# 4. Code I Wrote Today\n\n\n")
+            file_path = f"{directory}/{file_name}"
+            with open(file_path, "w") as f:
+                if args.coding:
+                    coding_journal_template = open("/Users/quinnle/PycharmProjects/md-file-manager/templates/coding_journal_template.md", "r")
+                    lines = coding_journal_template.read()
+                    f.write(lines)
+                elif args.practice:
+                    daily_practice_template = open("/Users/quinnle/PycharmProjects/md-file-manager/templates/daily_practice_template.md", "r")
+                    lines = daily_practice_template.read()
+                    f.write(lines)
+                else:
+                    f.write(f"{file_date.strftime('%Y%m%d')}")
+            f.close()
+            print(f"New file {file_name} is created.")
+        print(f"Finish creating {amount} file(s).")
     else:
-        print(f"{directory} path does not exist.")
+        print(f"{directory} does not exist.")
+        return
 
 
-def customized_md_file_generate(directory, days=7):
-    if days == 7:
-        md_file_generate(directory)
-    else:
-        if path_exists(directory):
-            today = datetime.date.today()
-            for i in range(1, days + 1):
-                file_date = today + datetime.timedelta(days=i)
-                file_name = f"{file_date.strftime('%Y%m%d')}.md"
-                file_path = os.path.join(directory, file_name)
-                with open(file_path, "w") as file:
-                    file.write("# 1. What I Learned Today\n\n\n")
-                    file.write("# 2. Questions I Have\n\n\n")
-                    file.write("# 3. What I Found Challenging\n\n\n")
-                    file.write("# 4. Code I Wrote Today\n\n\n")
-        else:
-            print(f"{directory} path does not exist.")
-            return None
-
-
-def update_md_file_content(file, new_content):
+def update_content(file, new_content):
     if is_md_file(file):
         with open(file, "w") as f:
             f.write(new_content)
@@ -100,15 +91,11 @@ def update_md_file_content(file, new_content):
         print(f"{file} file does not exist.")
 
 
-def update_all_md_files_content_in_dir(directory, new_content):
-    if path_exists(directory):
-        files = os.listdir(directory)
-        for f in files:
-            if is_md_file(f):
-                file_path = os.path.join(directory, f)
-                with open(file_path, "w") as file:
-                    file.write(new_content)
-                print(f"New content has been updated in {file_path}")
-        print("Finish updating content")
+def add_new_content(file, new_content):
+    if is_md_file(file):
+        with open(file, "a") as f:
+            f.write(new_content)
+        print(f"New content is added to {file}")
+        f.close()
     else:
-        print("Invalid path.")
+        print("Invalid path or file.")
