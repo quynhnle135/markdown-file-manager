@@ -51,12 +51,7 @@ def generate_md_file(directory, args):
         amount = args.days
     else:
         amount = 7
-    if args.coding:
-        template = "/Users/quinnle/PycharmProjects/md-file-manager/templates/coding_journal_template.md"
-    elif args.practice:
-        template = "/Users/quinnle/PycharmProjects/md-file-manager/templates/daily_practice_template.md"
-    else:
-        template = ""
+
     if path_exists(directory):
         today = datetime.date.today()
         for i in range(1, amount + 1):
