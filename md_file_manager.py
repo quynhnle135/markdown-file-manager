@@ -1,9 +1,10 @@
 import datetime
 import os
+from typing import List, Optional
 
 
-# Validate entered path/directory
-def path_exists(path):
+# Determine if the specified path is a valid path
+def path_exists(path: str) -> bool:
     try:
         return os.path.exists(path)
     except OSError as e:
@@ -11,12 +12,14 @@ def path_exists(path):
         return False
 
 
-# Validate if enter path/file is a valid Markdown
-def is_md_file(file_path):
+# Determine if the specified path/file is a valid Markdown file
+def is_md_file(file_path: str) -> bool:
     return file_path.endswith(".md")
 
 
-def read_file(file):
+# Read content of given Markdown
+def read_file(file: str) -> Optional[List[str]]:
+    # Determine if the specified path/file is a valid Markdown file
     if is_md_file(file):
         with open(file, "r") as f:
             lines = f.readlines()
@@ -28,7 +31,8 @@ def read_file(file):
         return None
 
 
-def count_md_files(directory):
+# Count the number of Markdowns in the given directory
+def count_md_files(directory: str) -> Optional[int]:
     if path_exists(directory):
         files = os.listdir(directory)
         count = sum(1 for file in files if is_md_file(file))
@@ -46,23 +50,27 @@ def count_md_files(directory):
         return None
 
 
-def generate_md_file(directory, args):
+# Create multiple Markdown files using a specified template if necessary
+def generate_md_file(directory: str, args) -> None:
+    # Verify if the user has specified a desired number of Markdown files
     if args.days:
         amount = args.days
     else:
         amount = 7
-
+    # Determine if the specified path is a valid path
     if path_exists(directory):
         today = datetime.date.today()
-        for i in range(1, amount + 1):
+        for i in range(0, amount + 1):
             file_date = today + datetime.timedelta(days=i)
             file_name = f"{file_date.strftime('%Y%m%d')}.md"
             file_path = f"{directory}/{file_name}"
             with open(file_path, "w") as f:
+                # Generate Markdown using the Coding Journal template if args.coding is specified
                 if args.coding:
                     coding_journal_template = open("/Users/quinnle/PycharmProjects/md-file-manager/templates/coding_journal_template.md", "r")
                     lines = coding_journal_template.read()
                     f.write(lines)
+                # Generate Markdown using the Daily Practice template if args.practice is specified
                 elif args.practice:
                     daily_practice_template = open("/Users/quinnle/PycharmProjects/md-file-manager/templates/daily_practice_template.md", "r")
                     lines = daily_practice_template.read()
@@ -77,7 +85,9 @@ def generate_md_file(directory, args):
         return
 
 
-def update_content(file, new_content):
+# Replace existing content in the specified Markdown file with new content
+def update_content(file: str, new_content: str) -> None:
+    # Determine if the specified path/file is a valid Markdown file
     if is_md_file(file):
         with open(file, "w") as f:
             f.write(new_content)
@@ -86,7 +96,9 @@ def update_content(file, new_content):
         print(f"{file} file does not exist.")
 
 
-def add_new_content(file, new_content):
+# Add new content to the end of the specified Markdown file
+def add_new_content(file: str, new_content: str) -> None:
+    # Determine if the specified path/file is a valid Markdown file
     if is_md_file(file):
         with open(file, "a") as f:
             f.write(new_content)
